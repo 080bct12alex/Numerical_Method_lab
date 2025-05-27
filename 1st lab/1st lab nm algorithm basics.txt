@@ -1,0 +1,127 @@
+Both the bisection and secant methods are numerical techniques used to find the roots of a function, which are the values of x for which f(x) = 0.
+
+Bisection Method
+The bisection method is a root-finding algorithm that repeatedly divides an interval in half and then selects the subinterval in which a root must lie for further processing. It relies on the Intermediate Value Theorem, which states that if a continuous function f(x) changes sign over an interval [a, b], then there must be at least one root within that interval. 
+
+Algorithm:
+Choose an interval \[a, b] such that f(a) and f(b) have opposite signs (i.e., f(a) * f(b) < 0).
+Calculate the midpoint m = (a + b) / 2.
+Evaluate f(m).
+If f(m) = 0 or if |b - a| is smaller than a predefined tolerance, then m is an approximate root.
+If f(m) has the same sign as f(a), then replace a with m. Otherwise, replace b with m.
+Repeat steps 2-5 until a root is found.
+
+
+Python Implementation:
+
+
+def bisection(f, a, b, tolerance):
+    if f(a) * f(b) >= 0:
+        print("f(a) and f(b) must have opposite signs")
+        return None
+
+    while (b - a) / 2.0 > tolerance:
+        m = (a + b) / 2.0
+        if f(m) == 0:
+            return m
+        elif f(m) * f(a) < 0:
+            b = m
+        else:
+            a = m
+    return (a + b) / 2.0
+
+#  usage:
+def f(x):
+    return x**3 - x - 2
+
+root = bisection(f, 1, 2, 0.0001)
+if root is not None:
+    print("Root:", root)
+
+
+Secant Method
+The secant method is another root-finding algorithm that approximates the root of a function by using a sequence of secant lines to approach the root. Unlike the bisection method, the secant method does not require an interval where the function changes sign. Instead, it starts with two initial guesses for the root.
+
+Algorithm:
+Choose two initial guesses, x0 and x1.
+Calculate the next approximation x2 using the formula: x2 = x1 - f(x1) * (x1 - x0) / (f(x1) - f(x0)).
+If |x2 - x1| is smaller than a predefined tolerance, then x2 is an approximate root.
+Replace x0 with x1 and x1 with x2.
+Repeat steps 2-4 until a root is found.
+
+
+Python Implementation:
+
+
+def secant(f, x0, x1, tolerance):
+    while abs(x1 - x0) > tolerance:
+        x2 = x1 - f(x1) * (x1 - x0) / (f(x1) - f(x0))
+        x0 = x1
+        x1 = x2
+    return x2
+
+
+#  usage:
+def f(x):
+    return x**3 - x - 2
+
+
+root = secant(f, 1, 2, 0.0001)
+print("Root:", root)
+
+
+Key Differences:
+
+Interval vs. Initial Guesses:
+The bisection method requires an interval where the function changes sign, while the secant method uses two initial guesses.
+
+Convergence:
+The bisection method is guaranteed to converge to a root, but it is slower. The secant method can be faster but may not always converge.
+
+Derivative:
+The bisection method does not require the derivative of the function, while the secant method approximates it using finite differences.
+
+When to Use Which Method:
+Use the bisection method when you need a reliable method with guaranteed convergence, even if it is slower.
+Use the secant method when you need a faster method and can provide good initial guesses, but be aware that it may not always converge.
+
+
+
+
+Newton Forward Interpolation (for Function Value Estimation)
+
+Newton forward interpolation is a separate numerical technique used to estimate the value of a function at intermediate points (a point x within a known set of data points)(not for root-finding). It constructs an interpolating polynomial using forward differences when you have tabulated data at equally spaced intervals or It’s based on constructing an interpolating polynomial using forward differences, and it works best when the given data points are equally spaced.
+
+Algorithm:
+1.Input:
+A set of equally spaced data points 
+
+Compute the forward differences:
+
+
+2. Find the value of p  
+
+where 
+h is the constant spacing between x-values.
+
+3. Construct the Newton forward interpolation formula:
+
+4. Compute the interpolated value at x.
+
+When to Use:
+✅ When you have tabulated data points that are equally spaced.
+✅ When you need to estimate the function value at some intermediate point within the given data.
+✅ It’s especially useful for small datasets or tabular data in numerical tables (like engineering or physics data).
+
+⚠️ Not for finding roots—it’s for estimating f(x).
+
+Example Use Case:
+You have a table of temperatures measured at hourly intervals, and you want to estimate the temperature at a fractional time (like 2:30 PM).
+
+You want to estimate some property (like pressure, density) at an intermediate point in a table of known values.
+
+
+
+
+
+
